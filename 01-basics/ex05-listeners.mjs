@@ -5,28 +5,32 @@
 import { EventEmitter } from "node:events";
 
 class Conversa extends EventEmitter {
-  messagesCount = 0;
-
   constructor() {
     super();
+    this.messagesCount = 0;
 
-    this.on("mensagemRecebida", (m) => {
-      console.log("Nova mensagem recebida: " + m);
+    this.on("mensagemEnviada", (m) => {
+      console.log(`Mensagem enviada: ${m}`);
     });
 
+    this.on("mensagemRecebida", (m) => {
+      console.log(`Mensagem recebida: ${m}`);
+    });
     this.on("mensagemRecebida", () => {
-      console.log(`Quantidade de mensagens: ${this.messagesCount}`);
-      console.log("==========================");
+      this.messagesCount++;
+      console.log(`Total de mensagens recebidas: ${this.messagesCount}`);
     });
   }
 
   enviarMensagem(msg) {
-    this.messagesCount++;
+    this.emit("mensagemEnviada", msg);
+  }
+  receberMensagem(msg) {
     this.emit("mensagemRecebida", msg);
   }
 }
 
 const novaConversa = new Conversa();
-novaConversa.enviarMensagem("Olá, tudo bem?");
-novaConversa.enviarMensagem("Quais os planos pro fim de semana?");
-novaConversa.enviarMensagem("Até logo!");
+novaConversa.receberMensagem("Tudo sim, e você?");
+novaConversa.receberMensagem("Quais os planos pro fim de semana?");
+novaConversa.receberMensagem("Até mais.");
