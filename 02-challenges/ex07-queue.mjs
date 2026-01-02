@@ -10,7 +10,7 @@ class Queue extends EventEmitter {
   #intervalId = null;
 
   addTask(task) {
-    console.log(`Adicionada [${task}] à fila!`);
+    this.emit("taskAdded", task);
     this.#taskList.push(task);
 
     if (!this.#intervalId) {
@@ -39,11 +39,13 @@ class Queue extends EventEmitter {
 
 const newQueue = new Queue();
 
+newQueue.on("taskAdded", (task) => console.log(`Tarefa [${task}] adicionada!`));
+
 newQueue.on("taskProcessed", (task) =>
   console.log(`Tarefa [${task}] processada!`)
 );
 
-newQueue.on("allTasksProcessed", (task) =>
+newQueue.on("allTasksProcessed", () =>
   console.log(`Todas as tarefas processadas! Aguardando novas...`)
 );
 

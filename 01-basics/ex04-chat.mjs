@@ -7,16 +7,24 @@ import { EventEmitter } from "node:events";
 class Conversa extends EventEmitter {
   constructor() {
     super();
+    this.on("mensagemEnviada", (m) => {
+      console.log(`Mensagem enviada: ${m}`);
+    });
+
     this.on("mensagemRecebida", (m) => {
-      console.log("Nova mensagem recebida:");
-      console.log(m);
+      console.log("Nova mensagem recebida!");
+      console.log(`Mensagem recebida: ${m}`);
     });
   }
 
   enviarMensagem(msg) {
+    this.emit("mensagemEnviada", msg);
+  }
+  receberMensagem(msg) {
     this.emit("mensagemRecebida", msg);
   }
 }
 
 const novaConversa = new Conversa();
 novaConversa.enviarMensagem("Olá, tudo bem?");
+novaConversa.receberMensagem("Tudo sim, e você?");
